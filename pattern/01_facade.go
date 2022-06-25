@@ -39,8 +39,8 @@ func newSearchFacade() *searchFacade {
 
 //реализуем простой интерфейс для взаимодействия с подсистемами
 func (s *searchFacade) searchAndClean(query string) (result string) {
-res:= s.query.search(query)
-s.clean.clean()
+res:= s.query.search(query) //используем метод для поиска по запросу структуры searchInChrome
+s.clean.clean() //используем метод для очистки истории структуры cleanHistoryChrome
 return res
 }
 
