@@ -22,11 +22,11 @@ import "fmt"
 */
 
 //пример использование состояние
-func exampleState(){
-	water := newWater() //инициализируем тип water
-	water.useWater() //попробуем выпить
-	water.freezeWater() //заморозим
-	water.useWater() //попробуем выпить еще раз
+func exampleState() {
+	water := newWater()  //инициализируем тип water
+	_ = water.useWater() //попробуем выпить
+	water.freezeWater()  //заморозим
+	_ = water.useWater() //попробуем выпить еще раз
 }
 
 //тип water выступает в роли контекста, имеет поле для хранения объектов состояний
@@ -97,6 +97,7 @@ func (i *iceState) defrostWater() {
 	i.water.drink = true
 }
 
+//второй конкретный тип состояния
 type liquidState struct {
 	water *water
 }
