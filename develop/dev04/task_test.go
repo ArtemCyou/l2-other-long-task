@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestAnagram(t *testing.T) {
 	tests := struct {
@@ -10,11 +13,13 @@ func TestAnagram(t *testing.T) {
 		args: []string{"Пятак", "пятка", "Тяпка", "листок", "слиток", "столик", "отвар", "автор", "автор", "товар"},
 		want: map[string]*[]string{
 			"листок": {"листок", "слиток", "столик"},
-			"пятка":  {"пятак", "пятка", "тяпка"},
-			"столик": {"автор", "отвар", "товар"},
+			"пятак":  {"пятак", "пятка", "тяпка"},
+			"отвар": {"автор", "отвар", "товар"},
 		},
 	}
 
 
-
+if got:= findAnagramm(&tests.args);  !reflect.DeepEqual(*got, tests.want) {
+	t.Errorf("Ожидали = %v, получили %v",  tests.want, got)
+}
 }
