@@ -1,5 +1,10 @@
 package main
 
+import (
+	"fmt"
+	"time"
+)
+
 /*
 === Or channel ===
 
@@ -33,6 +38,40 @@ start := time.Now()
 fmt.Printf(“fone after %v”, time.Since(start))
 */
 
-func main() {
+//функция которая будет объединять один или более done каналов в single канал
+func or(channels ...<-chan interface{}) <-chan interface{} {
+	all := make(chan interface{})      //общий канал для всех горутин сигнализирующий что один из каналов закрылся
+	for i, channel := range channels { //слушаем все каналы
+		go func(ch <-chan interface{}, closer chan interface{}) {
+			select {
+			case <-ch: //если один из каналов закрылся сигнализируем остальным
+				fmt.Printf("Один из каналов - %d закрылся!\n", i)
+				close(all)
+			case <-closer:
 
+			}
+		}(channel, all)
+	}
+	return all
+}
+
+func sig(after time.Duration) <-chan interface{} {
+		c := make(chan interface{})
+		go func() {
+			time.Sleep(after)
+			defer close(c)
+		}()
+		return c
+	}
+
+
+func main() {
+	start := time.Now()
+
+	<-or(
+		sig(2*time.Second),
+		sig(3*time.Second),
+		sig(1*time.Second),
+	)
+	fmt.Printf("fone after %v", time.Since(start))
 }
