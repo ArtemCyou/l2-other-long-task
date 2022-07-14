@@ -1,5 +1,13 @@
 package main
 
+import (
+	"dev11/api"
+	"dev11/api/middleware"
+	"dev11/internals/cfg"
+	"log"
+	"net/http"
+)
+
 /*
 === HTTP server ===
 
@@ -23,5 +31,18 @@ package main
 */
 
 func main() {
+	config := cfg.LoadAndStoreConfig() //загружаем конфиг
 
+	//создаем мультиплексор HTTP-запросов
+	mux := api.CreateApiHandlers()
+
+	serv := middleware.LogRequest(mux)
+	//запускаем сервер
+	log.Println("Сервер запущен: ", config.GetServConfig())
+	err := http.ListenAndServe(config.GetServConfig(), serv)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return
 }
